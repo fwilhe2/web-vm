@@ -1,0 +1,36 @@
+name: Build Images
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture:
+        - 'arm64'
+        - 'x86-64'
+        distro:
+        - debian
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Setup mkosi
+      uses: systemd/mkosi@v20
+    - name: Summary
+      run: |
+        sudo mkosi --distribution=${{ matrix.distro }} summary
+    - name: Build Image
+      run: |
+        sudo mkosi --root-password=toor --distribution=${{ matrix.distro }} --architecture=${{ matrix.architecture }}
+    - name: Upload Image
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-image-${{ matrix.architecture }}
+        path: web.raw
+        retention-days: 3
