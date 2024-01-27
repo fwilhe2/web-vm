@@ -1,2 +1,4 @@
-web*
-debian-tools
+/web*
+/debian-tools
+mkosi.cache
+mkosi.output

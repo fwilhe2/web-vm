@@ -1,3 +1,6 @@
 #!/bin/bash
 
 useradd --user-group --create-home --shell=/usr/bin/bash --password='$1$qrfxGnvJ$RfbXvkPHBJV2S5wWaiGfR/' web
+mkdir $BUILDROOT/home/web/.config
+cp $BUILDROOT/opt/web/.config/weston.ini $BUILDROOT/home/web/.config
+
